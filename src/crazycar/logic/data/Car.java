@@ -2,6 +2,11 @@ package crazycar.logic.data;
 
 public class Car {
 	
+	public final Car ferrari = new Car();
+	public final EmptyCar empty = new EmptyCar();
+	
+	private Car(){}
+	
 	public boolean isEmpty(){
 		return false;
 	}
@@ -11,7 +16,7 @@ public class Car {
 		return "Car";
 	}
 
-	public class EmptyCar extends Car{
+	private class EmptyCar extends Car{
 		public boolean isEmpty(){
 			return true;
 		}
