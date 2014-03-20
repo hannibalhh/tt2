@@ -8,6 +8,10 @@ autoScalaLibrary := false
 
 crossPaths := false
 
+libraryDependencies += "com.google.guava" % "guava" % "15.0"
+
+libraryDependencies += "log4j" % "log4j" % "1.2.17"
+
 scalaSource in Compile := baseDirectory.value / "src"
 
 javaSource in Compile := baseDirectory.value / "src"
