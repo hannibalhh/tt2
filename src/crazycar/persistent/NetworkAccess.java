@@ -17,5 +17,6 @@ public class NetworkAccess {
 		CarSpace cs = space.readById(CarSpace.class,new Id(Space.toSHA1(r)));
 		return cs;
 	}
+	
 
 }
