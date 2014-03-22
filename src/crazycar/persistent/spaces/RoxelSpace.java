@@ -1,18 +1,24 @@
 package crazycar.persistent.spaces;
 
 import com.gigaspaces.annotation.pojo.SpaceId;
-
+import com.gigaspaces.metadata.index.SpaceIndexType;
+import com.gigaspaces.annotation.pojo.SpaceIndex;
 public class RoxelSpace {
 
 	private Integer id;
 	private DirectionSpace direction;
 	private LocationSpace location;
 		
+	private  int column;
+	private int row;
+	
 	public RoxelSpace() {}
 	
 	public RoxelSpace(DirectionSpace direction, LocationSpace location) {
 		this.direction = direction;
 		this.location = location;
+		column=location.getX();
+		row=location.getY();
 	}
 
 	@SpaceId
@@ -24,10 +30,14 @@ public class RoxelSpace {
 		this.id = id;
 	}
 
+
+	@SpaceIndex(type=SpaceIndexType.BASIC)
 	public DirectionSpace getDirection() {
 		return direction;
 	}
 
+
+	@SpaceIndex(type=SpaceIndexType.BASIC)
 	public LocationSpace getLocation() {
 		return location;
 	}

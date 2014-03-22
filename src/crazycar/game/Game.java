@@ -2,6 +2,7 @@ package crazycar.game;
 
 import org.openspaces.core.GigaSpace;
 
+import crazycar.logic.data.Location;
 import crazycar.persistent.Space;
 import crazycar.persistent.communication.CarWorker;
 
@@ -46,7 +47,7 @@ public class Game {
 	static void initiateCars(int amount, GigaSpace space){
 		
 		for(int i=0; i<amount;i++){
-			CarWorker worker=new CarWorker();
+			CarWorker worker=new CarWorker(new Location(0, 0));
 			space.execute(worker);
 			
 		}
