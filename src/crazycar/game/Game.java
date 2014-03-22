@@ -43,7 +43,7 @@ public class Game {
 	}
 
 	
-	static void initiateCars(int amount, GigaSpace space){
+	static void initiateWorkers(int amount, GigaSpace space){
 		
 		for(int i=0; i<amount;i++){
 			Worker worker=new Worker();
