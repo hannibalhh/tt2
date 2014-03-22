@@ -2,10 +2,16 @@ package crazycar.game;
 
 import java.util.HashSet;
 
+import org.openspaces.core.GigaSpace;
 import org.openspaces.core.executor.Task;
+import org.openspaces.core.executor.TaskGigaSpace;
 
 public class MoveCarTask implements Task<HashSet<Integer>> {
 
+
+    @TaskGigaSpace
+    private transient GigaSpace gigaSpace;
+    
 	@Override
 	public HashSet<Integer> execute() throws Exception {
 		
