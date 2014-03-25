@@ -1,6 +1,8 @@
 package crazycar.persistent;
 
 import java.io.Serializable;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class Id implements Serializable{
 
@@ -9,10 +11,10 @@ public class Id implements Serializable{
     private String value;
     
     public Id() {}
-
-	public Id(String value) {
-		super();
-		this.value = value;
+	
+	public Id(Object value) {
+		this.value = toSHA1(value);
+//		System.out.println("id: " + this.value + " " + value.getClass());
 	}
 
 	public String getValue() {
@@ -53,6 +55,23 @@ public class Id implements Serializable{
 		return value;
 	}
     
-    
+	public static String toSHA1(byte[] convertme) {
+	    MessageDigest md = null;
+	    try {
+	        md = MessageDigest.getInstance("SHA-1");
+	    }
+	    catch(NoSuchAlgorithmException e) {
+	        e.printStackTrace();
+	    } 
+	    return new String(md.digest(convertme));
+	}
+	
+	public static String toSHA1(String s){
+		return toSHA1(s.getBytes());
+	}
+	
+	public static String toSHA1(Object s){
+		return toSHA1(s.toString());
+	}
 
 }

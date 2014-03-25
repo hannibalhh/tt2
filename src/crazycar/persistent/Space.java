@@ -1,8 +1,5 @@
 package crazycar.persistent;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import org.openspaces.core.GigaSpace;
 import org.openspaces.core.GigaSpaceConfigurer;
 import org.openspaces.core.space.UrlSpaceConfigurer;
@@ -26,22 +23,4 @@ public class Space {
 		return instance;
 	}
 	
-	public static String toSHA1(byte[] convertme) {
-	    MessageDigest md = null;
-	    try {
-	        md = MessageDigest.getInstance("SHA-1");
-	    }
-	    catch(NoSuchAlgorithmException e) {
-	        e.printStackTrace();
-	    } 
-	    return new String(md.digest(convertme));
-	}
-	
-	public static String toSHA1(String s){
-		return toSHA1(s.getBytes());
-	}
-	
-	public static String toSHA1(Object s){
-		return toSHA1(s.toString());
-	}
 }

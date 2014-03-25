@@ -2,28 +2,32 @@ package crazycar.logic.data;
 
 public class Location {
 
-	private final int x;
-	private final int y;
+	private final int column;
+	private final int row;
 	
-	public Location(int x, int y) {
-		this.x = x;
-		this.y = y;
+	private Location(int column, int row) {
+		this.column = column;
+		this.row = row;
+	}
+	
+	public static Location valueOf(int column, int row){
+		return new Location(column,row);
 	}
 
-	public int getX() {
-		return x;
+	public int getColumn() {
+		return column;
 	}
 
-	public int getY() {
-		return y;
+	public int getRow() {
+		return row;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + x;
-		result = prime * result + y;
+		result = prime * result + column;
+		result = prime * result + row;
 		return result;
 	}
 
@@ -36,15 +40,15 @@ public class Location {
 		if (getClass() != obj.getClass())
 			return false;
 		Location other = (Location) obj;
-		if (x != other.x)
+		if (column != other.column)
 			return false;
-		if (y != other.y)
+		if (row != other.row)
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "[x=" + x + ",y=" + y + "]";
+		return "[x=" + column + ",y=" + row + "]";
 	}
 }
