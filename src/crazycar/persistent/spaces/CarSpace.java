@@ -1,21 +1,33 @@
 package crazycar.persistent.spaces;
 
+import java.io.Serializable;
+
 import com.gigaspaces.annotation.pojo.SpaceClass;
 import com.gigaspaces.annotation.pojo.SpaceId;
 
+import crazycar.logic.data.Car;
 import crazycar.persistent.Id;
 @SpaceClass
-public class CarSpace {
+public class CarSpace implements Serializable{
 	
+	private static final long serialVersionUID = -7600971277589862101L;
 	private Id id;
-	private boolean empty;
+	private Boolean empty;
 	
 	public CarSpace(){}
 	
-    public CarSpace(Id id, boolean empty) {
+    public CarSpace(Id id, Boolean empty) {
 		this.id = id;
 		this.empty = empty;
 	}
+    
+    public static CarSpace valueOf(Car c){
+    	return new CarSpace(new Id(c),c.isEmpty());
+    }
+    
+    public Car toCar(){
+    	return Car.valueOf(empty);
+    }
 
     @SpaceId(autoGenerate = false)
     public Id getId() {
@@ -25,11 +37,11 @@ public class CarSpace {
         this.id = id;
     }
 	
-	public boolean isEmpty(){
+	public Boolean isEmpty(){
 		return false;
 	}
 		
-	public void setEmpty(boolean empty) {
+	public void setEmpty(Boolean empty) {
 		this.empty = empty;
 	}
 

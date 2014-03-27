@@ -47,7 +47,7 @@ public class Game {
 	static void initiateCars(int amount, GigaSpace space){
 		
 		for(int i=0; i<amount;i++){
-			CarWorker worker=new CarWorker(new Location(0, 0));
+			CarWorker worker=new CarWorker(Location.valueOf(0, 0));
 			space.execute(worker);
 			
 		}

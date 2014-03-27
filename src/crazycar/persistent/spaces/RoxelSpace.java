@@ -1,43 +1,56 @@
 package crazycar.persistent.spaces;
 
+import java.io.Serializable;
+
+import com.gigaspaces.annotation.pojo.SpaceClass;
 import com.gigaspaces.annotation.pojo.SpaceId;
 import com.gigaspaces.metadata.index.SpaceIndexType;
 import com.gigaspaces.annotation.pojo.SpaceIndex;
-public class RoxelSpace {
 
-	private Integer id;
+import crazycar.logic.data.Roxel;
+import crazycar.persistent.Id;
+
+@SpaceClass
+public class RoxelSpace  implements Serializable{
+
+	private static final long serialVersionUID = 6282025321671367311L;
+	private Id id;
 	private DirectionSpace direction;
 	private LocationSpace location;
-		
-	private  int column;
-	private int row;
-	
-	public RoxelSpace() {}
-	
-	public RoxelSpace(DirectionSpace direction, LocationSpace location) {
+
+	public RoxelSpace() {
+	}
+
+	public RoxelSpace(Id id, DirectionSpace direction, LocationSpace location) {
+		this.id = id;
 		this.direction = direction;
 		this.location = location;
-		column=location.getX();
-		row=location.getY();
+	}
+
+	public static RoxelSpace valueOf(Roxel r) {
+		return new RoxelSpace(new Id(r), DirectionSpace.valueOf(r
+				.getDirection()), LocationSpace.valueOf(r.getLocation()));
+	}
+
+	public Roxel toRoxel() {
+		return Roxel.valueOf(direction.toDirection(), location.toLocation());
 	}
 
 	@SpaceId
-	public Integer getId() {
+	public Id getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Id id) {
 		this.id = id;
 	}
 
-
-	@SpaceIndex(type=SpaceIndexType.BASIC)
+	@SpaceIndex(type = SpaceIndexType.BASIC)
 	public DirectionSpace getDirection() {
 		return direction;
 	}
 
-
-	@SpaceIndex(type=SpaceIndexType.BASIC)
+	@SpaceIndex(type = SpaceIndexType.BASIC)
 	public LocationSpace getLocation() {
 		return location;
 	}

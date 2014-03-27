@@ -1,32 +1,48 @@
 package crazycar.persistent.spaces;
 
-import com.gigaspaces.annotation.pojo.SpaceId;
+import java.io.Serializable;
 
-public class DirectionSpace {
-	private Integer id;
-	private Integer direction;
+import com.gigaspaces.annotation.pojo.SpaceClass;
+import com.gigaspaces.annotation.pojo.SpaceId;
+import crazycar.logic.data.Direction;
+import crazycar.persistent.Id;
+
+@SpaceClass
+public class DirectionSpace  implements Serializable{
+
+	private static final long serialVersionUID = 2051499763849972019L;
+	private Id id;
+	private String direction;
 	
 	public DirectionSpace(){}
 
-	public DirectionSpace(Integer id, Integer direction) {
+	public DirectionSpace(Id id, String direction) {
 		this.id = id;
 		this.direction = direction;
 	}
+	
+    public static DirectionSpace valueOf(Direction c){
+    	return new DirectionSpace(new Id(c),c.name());
+    }
+    
+    public Direction toDirection(){
+    	return Direction.valueOf(direction);
+    }
 
-	@SpaceId
-	public Integer getId() {
+    @SpaceId(autoGenerate = false)
+	public Id getId() {
 		return id;
 	}
 	
-	public void setId(Integer id) {
+	public void setId(Id id) {
 		this.id = id;
 	}
 	
-	public Integer getDirection() {
+	public String getDirection() {
 		return direction;
 	}
 	
-	public void setDirection(Integer direction) {
+	public void setDirection(String direction) {
 		this.direction = direction;
 	}
 

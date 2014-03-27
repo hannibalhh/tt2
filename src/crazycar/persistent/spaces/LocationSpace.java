@@ -1,51 +1,68 @@
 package crazycar.persistent.spaces;
 
+import java.io.Serializable;
+
+import com.gigaspaces.annotation.pojo.SpaceClass;
 import com.gigaspaces.annotation.pojo.SpaceId;
 
-public class LocationSpace {
+import crazycar.logic.data.Location;
+import crazycar.persistent.Id;
 
-	private Integer id;
-	private int x;
-	private int y;
+@SpaceClass
+public class LocationSpace  implements Serializable{
+
+	private static final long serialVersionUID = 2526097261187890810L;
+	private Id id;
+	private int column;
+	private int row;
 	
 	public LocationSpace(){}
 	
-	public LocationSpace(int x, int y) {
-		this.x = x;
-		this.y = y;
+	public LocationSpace(Id id,int column, int row) {
+		this.id = id;
+		this.column = column;
+		this.row = row;
 	}
 	
-	@SpaceId
-	public Integer getId() {
+    public static LocationSpace valueOf(Location l){
+    	return new LocationSpace(new Id(l),l.getColumn(),l.getRow());
+    }
+    
+    public Location toLocation(){
+    	return Location.valueOf(column, row);
+    }
+	
+    @SpaceId(autoGenerate = false)
+	public Id getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Id id) {
 		this.id = id;
 	}
 
-	public int getX() {
-		return x;
+	public int getColumn() {
+		return column;
 	}
 
-	public int getY() {
-		return y;
+	public int getRow() {
+		return row;
 	}
 
 	public void setX(int x) {
-		this.x = x;
+		this.column = x;
 	}
 
 	public void setY(int y) {
-		this.y = y;
+		this.row = y;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + x;
-		result = prime * result + y;
+		result = prime * result + column;
+		result = prime * result + row;
 		return result;
 	}
 
@@ -58,15 +75,15 @@ public class LocationSpace {
 		if (getClass() != obj.getClass())
 			return false;
 		LocationSpace other = (LocationSpace) obj;
-		if (x != other.x)
+		if (column != other.column)
 			return false;
-		if (y != other.y)
+		if (row != other.row)
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "[x=" + x + ",y=" + y + "]";
+		return "[x=" + column + ",y=" + row + "]";
 	}
 }

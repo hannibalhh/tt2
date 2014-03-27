@@ -9,6 +9,10 @@ public class Roxel {
 		this.direction = direction;
 		this.location = location;
 	}
+	
+	public static Roxel valueOf(Direction direction, Location location){
+		return new Roxel(direction,location);
+	}
 
 	public Direction getDirection() {
 		return direction;
