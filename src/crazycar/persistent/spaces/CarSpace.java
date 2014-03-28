@@ -4,9 +4,11 @@ import java.io.Serializable;
 
 import com.gigaspaces.annotation.pojo.SpaceClass;
 import com.gigaspaces.annotation.pojo.SpaceId;
+import com.gigaspaces.annotation.pojo.SpaceProperty;
 
 import crazycar.logic.data.Car;
 import crazycar.persistent.Id;
+
 @SpaceClass
 public class CarSpace implements Serializable{
 	
@@ -37,8 +39,9 @@ public class CarSpace implements Serializable{
         this.id = id;
     }
 	
+    @SpaceProperty
 	public Boolean isEmpty(){
-		return false;
+		return empty;
 	}
 		
 	public void setEmpty(Boolean empty) {

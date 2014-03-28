@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import com.gigaspaces.annotation.pojo.SpaceClass;
 import com.gigaspaces.annotation.pojo.SpaceId;
+import com.gigaspaces.annotation.pojo.SpaceProperty;
+
 import crazycar.logic.data.Direction;
 import crazycar.persistent.Id;
 
@@ -38,6 +40,7 @@ public class DirectionSpace  implements Serializable{
 		this.id = id;
 	}
 	
+    @SpaceProperty
 	public String getDirection() {
 		return direction;
 	}
@@ -70,16 +73,11 @@ public class DirectionSpace  implements Serializable{
 				return false;
 		} else if (!direction.equals(other.direction))
 			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "DirectionSpace [id=" + id + ", direction=" + direction + "]";
+		return "DirectionSpace[direction=" + direction + "]";
 	}
 }

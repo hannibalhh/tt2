@@ -5,8 +5,6 @@ import java.util.HashSet;
 import com.gigaspaces.async.AsyncFutureListener;
 import com.gigaspaces.async.AsyncResult;
 
-import crazycar.logic.data.Location;
-
 public class CarAsyncListener implements AsyncFutureListener<HashSet<Integer>> {
 
 	/*the result of an MoveCarTask is the not used because the relevant information

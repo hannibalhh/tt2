@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import com.gigaspaces.annotation.pojo.SpaceClass;
 import com.gigaspaces.annotation.pojo.SpaceId;
+import com.gigaspaces.annotation.pojo.SpaceProperty;
 
 import crazycar.logic.data.Location;
 import crazycar.persistent.Id;
@@ -13,8 +14,8 @@ public class LocationSpace  implements Serializable{
 
 	private static final long serialVersionUID = 2526097261187890810L;
 	private Id id;
-	private int column;
-	private int row;
+	private Integer column;
+	private Integer row;
 	
 	public LocationSpace(){}
 	
@@ -41,20 +42,22 @@ public class LocationSpace  implements Serializable{
 		this.id = id;
 	}
 
-	public int getColumn() {
+    @SpaceProperty
+	public Integer getColumn() {
 		return column;
 	}
+    
+	public void setColumn(Integer column) {
+		this.column = column;
+	}
 
-	public int getRow() {
+    @SpaceProperty
+	public Integer getRow() {
 		return row;
 	}
 
-	public void setX(int x) {
-		this.column = x;
-	}
-
-	public void setY(int y) {
-		this.row = y;
+	public void setRow(Integer row) {
+		this.row = row;
 	}
 
 	@Override
@@ -84,6 +87,6 @@ public class LocationSpace  implements Serializable{
 
 	@Override
 	public String toString() {
-		return "[x=" + column + ",y=" + row + "]";
+		return "LocationSpace[column=" + column + ",row=" + row + "]";
 	}
 }

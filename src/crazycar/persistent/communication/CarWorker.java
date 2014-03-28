@@ -9,7 +9,6 @@ import org.openspaces.core.executor.TaskGigaSpace;
 import com.j_spaces.core.client.SQLQuery;
 
 import crazycar.logic.data.*;
-import crazycar.persistent.spaces.CarSpace;
 import crazycar.persistent.spaces.DirectionSpace;
 import crazycar.persistent.spaces.RoxelSpace;
 public class CarWorker implements Task<HashSet<Integer>> {

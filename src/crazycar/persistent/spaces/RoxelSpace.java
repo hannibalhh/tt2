@@ -4,8 +4,7 @@ import java.io.Serializable;
 
 import com.gigaspaces.annotation.pojo.SpaceClass;
 import com.gigaspaces.annotation.pojo.SpaceId;
-import com.gigaspaces.metadata.index.SpaceIndexType;
-import com.gigaspaces.annotation.pojo.SpaceIndex;
+import com.gigaspaces.annotation.pojo.SpaceProperty;
 
 import crazycar.logic.data.Roxel;
 import crazycar.persistent.Id;
@@ -18,8 +17,7 @@ public class RoxelSpace  implements Serializable{
 	private DirectionSpace direction;
 	private LocationSpace location;
 
-	public RoxelSpace() {
-	}
+	public RoxelSpace() {}
 
 	public RoxelSpace(Id id, DirectionSpace direction, LocationSpace location) {
 		this.id = id;
@@ -45,18 +43,18 @@ public class RoxelSpace  implements Serializable{
 		this.id = id;
 	}
 
-	@SpaceIndex(type = SpaceIndexType.BASIC)
+    @SpaceProperty
 	public DirectionSpace getDirection() {
 		return direction;
 	}
-
-	@SpaceIndex(type = SpaceIndexType.BASIC)
-	public LocationSpace getLocation() {
-		return location;
-	}
-
+    
 	public void setDirection(DirectionSpace direction) {
 		this.direction = direction;
+	}
+
+    @SpaceProperty
+	public LocationSpace getLocation() {
+		return location;
 	}
 
 	public void setLocation(LocationSpace location) {
@@ -95,6 +93,6 @@ public class RoxelSpace  implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Roxel[direction=" + direction + ", location=" + location + "]";
+		return "RoxelSpace[direction=" + direction + ", location=" + location + "]";
 	}
 }

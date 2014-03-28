@@ -21,6 +21,10 @@ public class Location {
 	public int getRow() {
 		return row;
 	}
+	
+	public Location add(Location l){
+		return Location.valueOf(column+l.getColumn(), row+l.getRow());
+	}
 
 	@Override
 	public int hashCode() {
@@ -50,5 +54,9 @@ public class Location {
 	@Override
 	public String toString() {
 		return "[x=" + column + ",y=" + row + "]";
+	}
+
+	public static Location max(Location l, Location l2) {
+		return Location.valueOf(Math.max(l.getColumn(), l2.getColumn()), Math.max(l.getRow(), l2.getRow()));
 	}
 }
