@@ -25,6 +25,8 @@ public class Crazycar {
 
 	public static void main(String[] args) {
 		start();
+//		bus.post(Network.createSimple(15));
+
 		bus.post(Network.create(Location.valueOf(45, 15), 2));
 	}
 }

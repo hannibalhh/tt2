@@ -1,19 +1,22 @@
 package crazycar.logic.data;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
-import org.apache.log4j.Logger;
+import java.util.Set;
 
 public class Network {
-
-	private static Logger log = Logger.getLogger(Network.class);
+/**
+ * Paritionierung nach Kacheln (ortsbezogen), 
+ * immer eine Krezung darin, es kšnnen beliebig viele Kacheln auf einem Host
+ * ausgefŸhrt werden -> Space Routing Annotation
+ */
 	private static final Location root = Location.valueOf(0, 0);
 
-	private final List<Roxel> grid;
+	private final Set<Roxel> grid;
 	private final Location size;
 
-	public Network(List<Roxel> grid, Location size) {
+	public Network(Set<Roxel> grid, Location size) {
 		this.grid = grid;
 		this.size = size;
 	}
@@ -26,46 +29,62 @@ public class Network {
 		if (size % 3 != 0)
 			throw new UnsupportedOperationException(
 					"size have to be a multiple of 3");
-		List<Roxel> grid = new ArrayList<Roxel>();
+		Set<Roxel> grid = new HashSet<Roxel>();
 		for (int column = 0; column < size; column += 1) {
 			for (int row = 0; row < size; row += 1) {
+				// not both are even numbers than there must be a street
 				if (row % 2 != 0 || column % 2 != 0)
-					// not both are even numbers than there must be a street
-					// row == coolumn => its a crossroads
-					grid.add(Roxel.valueOf(Direction.nodecide, Location
-							.valueOf(column, row).add(start)));
+					grid.add(Roxel.valueOf(decideSimpleDirection(column, row),
+							Location.valueOf(column, row).add(start)));
 			}
 		}
 		return new Network(grid, Location.valueOf(size, size).add(start));
 	}
-	
+
+	public static Direction decideSimpleDirection(int column, int row) {
+		// row == column => its a crossroads
+		if (row == column) {
+			return Direction.nodecide;
+		} else if (row < column) {
+			return Direction.south;
+		} else {
+			return Direction.east;
+		}
+	}
+
 	public static final Network create(Location size) {
-		return create(size, 1, root);
+		return create(size, 1);
 	}
 
 	public static final Network create(Location size, int crossroadsDistance) {
-		return create(size, crossroadsDistance, root);
-	}
-
-	public static final Network create(Location size, int crossroadsDistance,
-			Location start) {
-		List<Roxel> grid = new ArrayList<Roxel>();
+		Set<Roxel> grid = new HashSet<Roxel>();
 		int i = 0;
+		List<Integer> currents = new ArrayList<Integer>();
 		int current = streetByCrossroadsDistance(0, crossroadsDistance);
+		currents.add(current);
 		while (current <= Math.max(size.getColumn(), size.getRow())) {
-			grid.add(Roxel.valueOf(Direction.nodecide,
-					Location.valueOf(current, current)));
 			for (int column = 0; column < size.getColumn(); column += 1) {
 				for (int row = 0; row < size.getRow(); row += 1) {
 					if (current == column || current == row)
-						grid.add(Roxel.valueOf(Direction.nodecide, Location
-								.valueOf(column, row).add(start)));
+						grid.add(Roxel.valueOf(decideDirection(column,row,currents),
+								Location.valueOf(column, row)));
 				}
 			}
 			i += 1;
 			current = streetByCrossroadsDistance(i, crossroadsDistance);
+			currents.add(current);
 		}
-		return new Network(grid, size.add(start));
+		return new Network(grid, size);
+	}
+
+	public static Direction decideDirection(int column, int row,List<Integer> currents) {
+		if (currents.contains(column)  && currents.contains(row)) {
+			return Direction.nodecide;
+		} else if (row < column) {
+			return Direction.south;
+		} else {
+			return Direction.east;
+		}
 	}
 
 	public static int streetByCrossroadsDistance(int n, int crossroadsDistance) {
@@ -73,23 +92,60 @@ public class Network {
 	}
 
 	public Network add(Network n) {
-		List<Roxel> g = new ArrayList<Roxel>();
+		Set<Roxel> g = new HashSet<Roxel>();
 		g.addAll(grid);
 		g.addAll(n.getGrid());
 		return new Network(g, Location.max(n.getSize(), size));
 	}
 
-	public List<Roxel> getGrid() {
+	public Set<Roxel> getGrid() {
 		return grid;
 	}
 
 	public Location getSize() {
 		return size;
 	}
-
+	
 	@Override
 	public String toString() {
-		return "Network[grid=" + grid + ", size=" + size + "]";
+		return "Network[size=" + size + "]"+toString(grid);
+	}
+
+	public String toStringWithCount() {
+		return "Network[size=" + size + ",  count(Direction.nodecide)="
+				+ countDirection(grid, Direction.nodecide) + "] with"
+				+ toString(grid,Direction.nodecide);
+	}
+
+	public <E> String toString(Iterable<E> l) {
+		String s = "";
+		for (E e : l) {
+			s += "\n" + e;
+		}
+		return s;
+	}
+
+	public String toString(Iterable<Roxel> l, Direction d) {
+		String s = "";
+		for (Roxel r : l) {
+			if (r.getDirection().equals(d)) {
+				s += "\n" + r;
+			}
+		}
+		return s;
+	}
+
+	public int countDirection(Iterable<Roxel> l, Direction d) {
+		int i = 0;
+		if (d == null) {
+			return i;
+		}
+		for (Roxel r : l) {
+			if (r.getDirection().equals(d)) {
+				i += 1;
+			}
+		}
+		return i;
 	}
 
 	@Override
