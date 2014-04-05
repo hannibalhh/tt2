@@ -4,14 +4,14 @@ public class Roxel {
 
 	private final Direction direction;
 	private final Location location;
-		
+
 	public Roxel(Direction direction, Location location) {
 		this.direction = direction;
 		this.location = location;
 	}
-	
-	public static Roxel valueOf(Direction direction, Location location){
-		return new Roxel(direction,location);
+
+	public static Roxel valueOf(Direction direction, Location location) {
+		return new Roxel(direction, location);
 	}
 
 	public Direction getDirection() {
@@ -20,6 +20,24 @@ public class Roxel {
 
 	public Location getLocation() {
 		return location;
+	}
+	
+	public Roxel nextRoxel(){
+		return Roxel.valueOf(direction, nextLocation());
+	}
+
+	//TODO modulo for wall
+	public Location nextLocation() {
+		if (direction.equals(Direction.north))
+			return location.add(Location.valueOf(0, -1));
+		else if (direction.equals(Direction.east))
+			return location.add(Location.valueOf(1, 0));
+		else if (direction.equals(Direction.south))
+			return location.add(Location.valueOf(0, 1));
+		else if (direction.equals(Direction.west))
+			return location.add(Location.valueOf(-1, 0));
+		else
+			return location;
 	}
 
 	@Override

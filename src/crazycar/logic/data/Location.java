@@ -10,6 +10,10 @@ public class Location {
 		this.row = row;
 	}
 	
+	public static Location random(Location max){
+		return Location.valueOf((int)Math.round(Math.random() * max.column),(int)Math.round(Math.random() * max.row));
+	}
+	
 	public static Location valueOf(int column, int row){
 		return new Location(column,row);
 	}
@@ -24,6 +28,10 @@ public class Location {
 	
 	public Location add(Location l){
 		return Location.valueOf(column+l.getColumn(), row+l.getRow());
+	}
+	
+	public Direction decideDirection(){
+		return Network.decideSimpleDirection(column, row);
 	}
 
 	@Override

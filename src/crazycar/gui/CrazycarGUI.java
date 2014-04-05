@@ -6,11 +6,13 @@ import ch.aplu.jgamegrid.Location;
 
 import com.google.common.eventbus.Subscribe;
 
-import crazycar.gui.actors.NoStreet;
-import crazycar.gui.actors.Street;
+import crazycar.gui.actors.NoRoad;
+import crazycar.gui.actors.Crossroads;
+import crazycar.gui.actors.RoadNS;
+import crazycar.gui.actors.RoadWE;
+import crazycar.logic.data.Direction;
 import crazycar.logic.data.Network;
 import crazycar.logic.data.Roxel;
-
 
 public class CrazycarGUI extends GameGrid {
 
@@ -36,10 +38,20 @@ public class CrazycarGUI extends GameGrid {
 		setNbHorzCells(e.getSize().getColumn());
 		setNbVertCells(e.getSize().getRow());
 		for (Roxel l : e.getGrid()) {
-			addActor(new Street(), new Location(l.getLocation().getColumn(),l.getLocation().getRow()));
+			if (l.getDirection().equals(Direction.south)
+					|| l.getDirection().equals(Direction.north))
+				addActor(new RoadNS(), new Location(
+						l.getLocation().getColumn(), l.getLocation().getRow()));
+			else if (l.getDirection().equals(Direction.east)
+					|| l.getDirection().equals(Direction.west))
+				addActor(new RoadWE(), new Location(
+						l.getLocation().getColumn(), l.getLocation().getRow()));
+			else
+				addActor(new Crossroads(), new Location(l.getLocation()
+						.getColumn(), l.getLocation().getRow()));
 		}
 		for (Location l : getEmptyLocations()) {
-			addActor(new NoStreet(), l);
+			addActor(new NoRoad(), l);
 		}
 		show();
 		setVisible(true);
@@ -48,5 +60,4 @@ public class CrazycarGUI extends GameGrid {
 	public static String imagefolder() {
 		return "images/" + imagesize;
 	}
-
 }

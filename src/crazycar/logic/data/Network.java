@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Set;
 
 public class Network {
-/**
- * Paritionierung nach Kacheln (ortsbezogen), 
- * immer eine Krezung darin, es kšnnen beliebig viele Kacheln auf einem Host
- * ausgefŸhrt werden -> Space Routing Annotation
- */
+	/**
+	 * Paritionierung nach Kacheln (ortsbezogen), immer eine Krezung darin, es
+	 * kšnnen beliebig viele Kacheln auf einem Host ausgefŸhrt werden -> Space
+	 * Routing Annotation
+	 */
 	private static final Location root = Location.valueOf(0, 0);
 
 	private final Set<Roxel> grid;
@@ -42,14 +42,14 @@ public class Network {
 	}
 
 	public static Direction decideSimpleDirection(int column, int row) {
-		// row == column => its a crossroads
-		if (row == column) {
+		// both odd then croassroads
+		if (row % 2 != 0 && column % 2 != 0)
 			return Direction.nodecide;
-		} else if (row < column) {
+		else if (column % 2 != 0) {
 			return Direction.south;
-		} else {
+		} else  {
 			return Direction.east;
-		}
+		} 
 	}
 
 	public static final Network create(Location size) {
@@ -66,7 +66,8 @@ public class Network {
 			for (int column = 0; column < size.getColumn(); column += 1) {
 				for (int row = 0; row < size.getRow(); row += 1) {
 					if (current == column || current == row)
-						grid.add(Roxel.valueOf(decideDirection(column,row,currents),
+						grid.add(Roxel.valueOf(
+								decideDirection(column, row, currents),
 								Location.valueOf(column, row)));
 				}
 			}
@@ -77,8 +78,9 @@ public class Network {
 		return new Network(grid, size);
 	}
 
-	public static Direction decideDirection(int column, int row,List<Integer> currents) {
-		if (currents.contains(column)  && currents.contains(row)) {
+	public static Direction decideDirection(int column, int row,
+			List<Integer> currents) {
+		if (currents.contains(column) && currents.contains(row)) {
 			return Direction.nodecide;
 		} else if (row < column) {
 			return Direction.south;
@@ -105,16 +107,16 @@ public class Network {
 	public Location getSize() {
 		return size;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Network[size=" + size + "]"+toString(grid);
+		return "Network[size=" + size + "]" + toString(grid);
 	}
 
 	public String toStringWithCount() {
 		return "Network[size=" + size + ",  count(Direction.nodecide)="
 				+ countDirection(grid, Direction.nodecide) + "] with"
-				+ toString(grid,Direction.nodecide);
+				+ toString(grid, Direction.nodecide);
 	}
 
 	public <E> String toString(Iterable<E> l) {

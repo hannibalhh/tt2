@@ -1,5 +1,8 @@
 package crazycar.persistent;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.openspaces.core.GigaSpace;
 
@@ -7,6 +10,7 @@ import com.j_spaces.core.client.SQLQuery;
 
 import crazycar.logic.data.Car;
 import crazycar.logic.data.Location;
+import crazycar.logic.data.Network;
 import crazycar.logic.data.Roxel;
 import crazycar.persistent.spaces.CarSpace;
 import crazycar.persistent.spaces.LocationSpace;
@@ -20,6 +24,28 @@ public class NetworkAccess {
 	public NetworkAccess(){
 		log.debug("start");
 	}
+	
+	public void save(Network n){
+		for (Roxel r : n.getGrid())
+			space.write(RoxelSpace.valueOf(r));
+	}
+	
+	public void write(Roxel r){
+		space.write(RoxelSpace.valueOf(r));
+	}
+	
+	public boolean take(Roxel r){
+		return space.takeById(RoxelSpace.class,new Id(r)) != null;
+	}
+	
+	public List<RoxelSpace> snapshot(){
+		SQLQuery<RoxelSpace> query = new SQLQuery<RoxelSpace>(RoxelSpace.class,"direction.direction = 'blocked'");
+		return Arrays.asList(space.readMultiple(query));
+	}
+	
+	/*
+	 * play area
+	 */
 	
 	public void save(Car c){
 		space.write(CarSpace.valueOf(c));
@@ -42,11 +68,4 @@ public class NetworkAccess {
 		return space.takeById(LocationSpace.class,new Id(l)) != null;
 	}
 	
-	public void save(Roxel r){
-		space.write(RoxelSpace.valueOf(r));
-	}
-	
-	public boolean take(Roxel r){
-		return space.takeById(RoxelSpace.class,new Id(r)) != null;
-	}
 }

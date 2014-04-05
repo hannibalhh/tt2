@@ -37,6 +37,15 @@ public class Game {
 	 * - Start GUI
 	 */
 	
+	/*
+	 * Aufgabe 1: Autos fahren auf einem Strassennetz, ausgeführt in XAP
+	 * 				Vorgabe: Roxels, Autos
+	 * 				Autos versuchen vorwärts zu fahren
+	 * 				Kreuzungen
+	 * 				GUI zeigt in einem intervallgesteurten Snapshot die Position der Autos
+	 * Aufgabe 2: Ampeln + Partitionierung
+	 */
+	
 	public static void main(String[] args) {
 		final GigaSpace space = Space.create().getInstance();
 		
