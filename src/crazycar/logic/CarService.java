@@ -16,31 +16,35 @@ import crazycar.logic.data.Roxel;
 @Notify
 public class CarService {
 	
-	private static final Logger log = Logger.getLogger(Crazycar.class);
+	private static final Logger log = Logger.getLogger(CarService.class);
 
-	private Roxel roxel = initRoxel();
-	
-	public static Roxel initRoxel(){
-		Location location = Location.random(Crazycar.size);
-		Direction direction = location.decideDirection(); 	
-		return Roxel.valueOf(direction, location);
-	}
+	private Roxel roxel = Crazycar.networkAccess.takeRandomRoxel();
 
 	// init mit einer random location
 	public CarService(){
 		//TODO direction not allowed to be blocked
-		Crazycar.networkAccess.take(roxel);
+		Crazycar.networkAccess.write(roxel.toBlocked());
 		Crazycar.bus.post(AddCar.valueOf(roxel));
 		log.debug("init " + roxel);
 	}
 	
 	@SpaceDataEvent
-	void step(){
+	public void step(){
 		Roxel r = roxel.nextRoxel();
 		log.debug("next roxel " + r);
-		Crazycar.networkAccess.take(r);
-		Crazycar.networkAccess.write(roxel);
+		
+		log.debug("blocked: " + Crazycar.networkAccess.blockRoxel(r));
+		Crazycar.networkAccess.releaseRoxel(roxel);
+		sleep(1000);
 		roxel = r;
+	}
+	
+	void sleep(int i){
+		try {
+			Thread.sleep(i);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	// step 

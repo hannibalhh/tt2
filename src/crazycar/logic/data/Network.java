@@ -1,6 +1,7 @@
 package crazycar.logic.data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,7 +12,6 @@ public class Network {
 	 * kšnnen beliebig viele Kacheln auf einem Host ausgefŸhrt werden -> Space
 	 * Routing Annotation
 	 */
-	private static final Location root = Location.valueOf(0, 0);
 
 	private final Set<Roxel> grid;
 	private final Location size;
@@ -22,23 +22,17 @@ public class Network {
 	}
 
 	public static final Network createSimple(int size) {
-		return createSimple(size, root);
-	}
-
-	public static final Network createSimple(int size, Location start) {
 		if (size % 3 != 0)
-			throw new UnsupportedOperationException(
-					"size have to be a multiple of 3");
+			throw new UnsupportedOperationException("size have to be a multiple of 3");
 		Set<Roxel> grid = new HashSet<Roxel>();
 		for (int column = 0; column < size; column += 1) {
 			for (int row = 0; row < size; row += 1) {
 				// not both are even numbers than there must be a street
 				if (row % 2 != 0 || column % 2 != 0)
-					grid.add(Roxel.valueOf(decideSimpleDirection(column, row),
-							Location.valueOf(column, row).add(start)));
+					grid.add(Roxel.valueOf(decideSimpleDirection(column, row), Location.valueOf(column, row)));
 			}
 		}
-		return new Network(grid, Location.valueOf(size, size).add(start));
+		return new Network(grid, Location.valueOf(size, size));
 	}
 
 	public static Direction decideSimpleDirection(int column, int row) {
@@ -47,9 +41,9 @@ public class Network {
 			return Direction.nodecide;
 		else if (column % 2 != 0) {
 			return Direction.south;
-		} else  {
+		} else {
 			return Direction.east;
-		} 
+		}
 	}
 
 	public static final Network create(Location size) {
@@ -66,9 +60,7 @@ public class Network {
 			for (int column = 0; column < size.getColumn(); column += 1) {
 				for (int row = 0; row < size.getRow(); row += 1) {
 					if (current == column || current == row)
-						grid.add(Roxel.valueOf(
-								decideDirection(column, row, currents),
-								Location.valueOf(column, row)));
+						grid.add(Roxel.valueOf(decideDirection(column, row, currents), Location.valueOf(column, row)));
 				}
 			}
 			i += 1;
@@ -78,8 +70,7 @@ public class Network {
 		return new Network(grid, size);
 	}
 
-	public static Direction decideDirection(int column, int row,
-			List<Integer> currents) {
+	public static Direction decideDirection(int column, int row, List<Integer> currents) {
 		if (currents.contains(column) && currents.contains(row)) {
 			return Direction.nodecide;
 		} else if (row < column) {
@@ -114,9 +105,7 @@ public class Network {
 	}
 
 	public String toStringWithCount() {
-		return "Network[size=" + size + ",  count(Direction.nodecide)="
-				+ countDirection(grid, Direction.nodecide) + "] with"
-				+ toString(grid, Direction.nodecide);
+		return "Network[size=" + size + ",  count(Direction.nodecide)=" + countDirection(grid, Direction.nodecide) + "] with" + toString(grid, Direction.nodecide);
 	}
 
 	public <E> String toString(Iterable<E> l) {

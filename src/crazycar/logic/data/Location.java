@@ -1,5 +1,7 @@
 package crazycar.logic.data;
 
+import crazycar.Crazycar;
+
 public class Location {
 
 	private final int column;
@@ -10,12 +12,8 @@ public class Location {
 		this.row = row;
 	}
 	
-	public static Location random(Location max){
-		return Location.valueOf((int)Math.round(Math.random() * max.column),(int)Math.round(Math.random() * max.row));
-	}
-	
 	public static Location valueOf(int column, int row){
-		return new Location(column,row);
+		return new Location(column ,row);
 	}
 
 	public int getColumn() {
@@ -27,11 +25,7 @@ public class Location {
 	}
 	
 	public Location add(Location l){
-		return Location.valueOf(column+l.getColumn(), row+l.getRow());
-	}
-	
-	public Direction decideDirection(){
-		return Network.decideSimpleDirection(column, row);
+		return Location.valueOf((column+l.getColumn()) % Crazycar.size.column, (row+l.getRow()) % Crazycar.size.row);
 	}
 
 	@Override
@@ -61,7 +55,7 @@ public class Location {
 
 	@Override
 	public String toString() {
-		return "[x=" + column + ",y=" + row + "]";
+		return "[column=" + column + ",row=" + row + "]";
 	}
 
 	public static Location max(Location l, Location l2) {

@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 
 public class Id implements Serializable {
 
-//	private static final Logger log = Logger.getLogger(Id.class);
+	private static final Logger log = Logger.getLogger(Id.class);
 
 	private static final long serialVersionUID = 1L;
 
@@ -19,7 +19,7 @@ public class Id implements Serializable {
 
 	public Id(Object value) {
 		this.value = toSHA1(value);
-//		log.debug("id: " + this.value + " " + value.getClass());
+//		log.debug("id: " + this.value + " " + value);
 	}
 
 	public String getValue() {

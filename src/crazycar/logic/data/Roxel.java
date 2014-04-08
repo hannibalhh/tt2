@@ -25,6 +25,10 @@ public class Roxel {
 	public Roxel nextRoxel(){
 		return Roxel.valueOf(direction, nextLocation());
 	}
+	
+	public Roxel toBlocked(){
+		return Roxel.valueOf(Direction.blocked,location);	
+	}
 
 	//TODO modulo for wall
 	public Location nextLocation() {
