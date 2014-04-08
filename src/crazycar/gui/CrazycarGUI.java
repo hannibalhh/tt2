@@ -1,23 +1,33 @@
 package crazycar.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.aplu.jgamegrid.Actor;
 import ch.aplu.jgamegrid.GameGrid;
 import ch.aplu.jgamegrid.Location;
 
 import com.google.common.eventbus.Subscribe;
 
+import crazycar.gui.actors.CarEastActor;
+import crazycar.gui.actors.CarNorthActor;
+import crazycar.gui.actors.CarSouthActor;
+import crazycar.gui.actors.CarWestActor;
 import crazycar.gui.actors.NoRoad;
 import crazycar.gui.actors.Crossroads;
 import crazycar.gui.actors.RoadNS;
 import crazycar.gui.actors.RoadWE;
+import crazycar.logic.data.AddCar;
 import crazycar.logic.data.Direction;
 import crazycar.logic.data.Network;
 import crazycar.logic.data.Roxel;
+import crazycar.logic.data.Snapshot;
 
 public class CrazycarGUI extends GameGrid {
 
 	// imagesize of cells in px
 	public final static int imagesize = 25;
+	private List<Actor> cars = new ArrayList<Actor>();
 
 	private static final long serialVersionUID = 7378323006789259694L;
 
@@ -30,6 +40,37 @@ public class CrazycarGUI extends GameGrid {
 	public CrazycarGUI() {
 		super(50, 18, imagesize, java.awt.Color.black);
 		setTitle("Crazycar");
+	}
+	
+	private Actor newCarAndSave(Roxel r){
+		Actor c = newCar(r);
+		cars.add(c);
+		return c;
+	}
+
+	public Actor newCar(Roxel r) {
+		if (r.getDirection().equals(Direction.north)) {
+			return new CarNorthActor();
+		} else if (r.getDirection().equals(Direction.south)) {
+			return new CarSouthActor();
+		} else if (r.getDirection().equals(Direction.west)) {
+			return new CarWestActor();
+		} else if (r.getDirection().equals(Direction.east)) {
+			return new CarEastActor();
+		}
+		throw new UnsupportedOperationException("newCar:wrong direction "
+				+ r.getDirection());
+	}
+
+	@Subscribe
+	public void addCar(AddCar a) {
+		addActor(newCarAndSave(a.getRoxel()), new Location(a.getRoxel().getLocation()
+				.getColumn(), a.getRoxel().getLocation().getRow()));
+	}
+
+	@Subscribe
+	public void moveListener(Snapshot s) {
+
 	}
 
 	@Subscribe

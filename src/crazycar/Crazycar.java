@@ -31,7 +31,7 @@ public class Crazycar {
 	}
 
 	public static void start() {
-//		startGUI();
+		startGUI();
 		bus.post(network);
 		networkAccess.save(network);
 		carInit();

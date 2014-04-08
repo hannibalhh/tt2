@@ -1,5 +1,6 @@
 package crazycar.persistent;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import crazycar.logic.data.Car;
 import crazycar.logic.data.Location;
 import crazycar.logic.data.Network;
 import crazycar.logic.data.Roxel;
+import crazycar.logic.data.Snapshot;
 import crazycar.persistent.spaces.CarSpace;
 import crazycar.persistent.spaces.LocationSpace;
 import crazycar.persistent.spaces.RoxelSpace;
@@ -38,9 +40,17 @@ public class NetworkAccess {
 		return space.takeById(RoxelSpace.class,new Id(r)) != null;
 	}
 	
-	public List<RoxelSpace> snapshot(){
+	private List<RoxelSpace> snapshotSpace(){
 		SQLQuery<RoxelSpace> query = new SQLQuery<RoxelSpace>(RoxelSpace.class,"direction.direction = 'blocked'");
 		return Arrays.asList(space.readMultiple(query));
+	}
+	
+	public Snapshot snapshot(){
+		List<Roxel> l = new ArrayList<Roxel>();
+		for(RoxelSpace r : snapshotSpace()){
+			l.add(r.toRoxel());
+		}
+		return Snapshot.valueOf(l);
 	}
 	
 	/*

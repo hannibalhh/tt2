@@ -7,6 +7,7 @@ import org.openspaces.events.notify.Notify;
 import org.openspaces.events.polling.Polling;
 
 import crazycar.Crazycar;
+import crazycar.logic.data.AddCar;
 import crazycar.logic.data.Direction;
 import crazycar.logic.data.Location;
 import crazycar.logic.data.Roxel;
@@ -29,6 +30,7 @@ public class CarService {
 	public CarService(){
 		//TODO direction not allowed to be blocked
 		Crazycar.networkAccess.take(roxel);
+		Crazycar.bus.post(AddCar.valueOf(roxel));
 		log.debug("init " + roxel);
 	}
 	
