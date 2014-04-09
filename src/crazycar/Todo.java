@@ -1,6 +1,6 @@
-package crazycar.game;
+package crazycar;
 
-public class Game {
+public class Todo {
 
 	/*Main Idea 
 	 * Movement:
@@ -38,6 +38,13 @@ public class Game {
 	 * 				Kreuzungen
 	 * 				GUI zeigt in einem intervallgesteurten Snapshot die Position der Autos
 	 * Aufgabe 2: Ampeln + Partitionierung
+	 * 
+	 * Vorgehen Boehm:
+	 * Processing Unit
+	 * Ampeln
+	 * Indezierung
+	 * Partionierung
+	 * Ist es skalierbungsfähig?
 	 */
 	
 }
