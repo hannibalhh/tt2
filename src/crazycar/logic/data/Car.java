@@ -21,7 +21,7 @@ public class Car {
 
 	@Override
 	public String toString() {
-		return "Car";
+		return "Ferrari";
 	}
 
 	private class EmptyCar extends Car {
@@ -32,7 +32,7 @@ public class Car {
 
 		@Override
 		public String toString() {
-			return "EmptyCar";
+			return "Empty";
 		}
 	}
 }

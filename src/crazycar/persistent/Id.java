@@ -4,11 +4,10 @@ import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.apache.log4j.Logger;
 
 public class Id implements Serializable {
 
-	private static final Logger log = Logger.getLogger(Id.class);
+//	private static final Logger log = Logger.getLogger(Id.class);
 
 	private static final long serialVersionUID = 1L;
 

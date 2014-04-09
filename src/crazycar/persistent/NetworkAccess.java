@@ -9,11 +9,9 @@ import org.openspaces.core.GigaSpace;
 
 import com.gigaspaces.client.ChangeResult;
 import com.gigaspaces.client.ChangeSet;
-import com.gigaspaces.query.IdQuery;
 import com.j_spaces.core.client.SQLQuery;
 
 import crazycar.logic.data.Car;
-import crazycar.logic.data.Direction;
 import crazycar.logic.data.Location;
 import crazycar.logic.data.Network;
 import crazycar.logic.data.Roxel;
@@ -47,20 +45,20 @@ public class NetworkAccess {
 		space.write(RoxelSpace.valueOf(r));
 	}
 	
-	public boolean blockRoxel(Roxel r){
+	public boolean roxelWithCar(Roxel r){
 		SQLQuery<RoxelSpace> query = new SQLQuery<RoxelSpace>(RoxelSpace.class,"location.row =" + r.getLocation().getRow() + " and location.column = " + r.getLocation().getColumn());
-		ChangeResult<RoxelSpace> cr = space.change(query, new ChangeSet().set("direction", DirectionSpace.valueOf(Direction.blocked)));
+		ChangeResult<RoxelSpace> cr = space.change(query, new ChangeSet().set("car", CarSpace.valueOf(Car.ferrari)).set("direction", DirectionSpace.valueOf(r.getDirection())));
 		return cr.getNumberOfChangedEntries() >= 1;
 	}
 	
 	public Roxel releaseRoxel(Roxel r){
 		SQLQuery<RoxelSpace> query = new SQLQuery<RoxelSpace>(RoxelSpace.class,"location.row =" + r.getLocation().getRow() + " and location.column = " + r.getLocation().getColumn());
-		space.change(query, new ChangeSet().set("direction.direction", "'"+r.getDirection()+"'"));
+		space.change(query, new ChangeSet().set("car", CarSpace.valueOf(Car.empty)));
 		return r;
 	}
 	
 	public Roxel takeRandomRoxel(){
-		SQLQuery<RoxelSpace> query = new SQLQuery<RoxelSpace>(RoxelSpace.class,"direction.direction != 'blocked' and direction.direction != 'nodecide'");
+		SQLQuery<RoxelSpace> query = new SQLQuery<RoxelSpace>(RoxelSpace.class,"car.empty = true and direction.direction != 'nodecide'");
 		return space.take(query).toRoxel();
 	}
 	
@@ -74,7 +72,7 @@ public class NetworkAccess {
 	}
 	
 	private List<RoxelSpace> snapshotSpace(){
-		SQLQuery<RoxelSpace> query = new SQLQuery<RoxelSpace>(RoxelSpace.class,"direction.direction = 'blocked'");
+		SQLQuery<RoxelSpace> query = new SQLQuery<RoxelSpace>(RoxelSpace.class,"car.empty = false");
 		return Arrays.asList(space.readMultiple(query));
 	}
 	

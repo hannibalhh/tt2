@@ -1,7 +1,6 @@
 package crazycar.logic.data;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +28,7 @@ public class Network {
 			for (int row = 0; row < size; row += 1) {
 				// not both are even numbers than there must be a street
 				if (row % 2 != 0 || column % 2 != 0)
-					grid.add(Roxel.valueOf(decideSimpleDirection(column, row), Location.valueOf(column, row)));
+					grid.add(Roxel.empty(decideSimpleDirection(column, row), Location.valueOf(column, row)));
 			}
 		}
 		return new Network(grid, Location.valueOf(size, size));
@@ -60,7 +59,7 @@ public class Network {
 			for (int column = 0; column < size.getColumn(); column += 1) {
 				for (int row = 0; row < size.getRow(); row += 1) {
 					if (current == column || current == row)
-						grid.add(Roxel.valueOf(decideDirection(column, row, currents), Location.valueOf(column, row)));
+						grid.add(Roxel.empty(decideDirection(column, row, currents), Location.valueOf(column, row)));
 				}
 			}
 			i += 1;

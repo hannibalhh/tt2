@@ -4,12 +4,8 @@ import org.apache.log4j.Logger;
 import org.openspaces.events.EventDriven;
 import org.openspaces.events.adapter.SpaceDataEvent;
 import org.openspaces.events.notify.Notify;
-import org.openspaces.events.polling.Polling;
 
 import crazycar.Crazycar;
-import crazycar.logic.data.AddCar;
-import crazycar.logic.data.Direction;
-import crazycar.logic.data.Location;
 import crazycar.logic.data.Roxel;
 
 @EventDriven 
@@ -23,8 +19,7 @@ public class CarService {
 	// init mit einer random location
 	public CarService(){
 		//TODO direction not allowed to be blocked
-		Crazycar.networkAccess.write(roxel.toBlocked());
-		Crazycar.bus.post(AddCar.valueOf(roxel));
+		Crazycar.networkAccess.write(roxel.toCar());
 		log.debug("init " + roxel);
 	}
 	
@@ -33,7 +28,7 @@ public class CarService {
 		Roxel r = roxel.nextRoxel();
 		log.debug("next roxel " + r);
 		
-		log.debug("blocked: " + Crazycar.networkAccess.blockRoxel(r));
+		log.debug("blocked: " + Crazycar.networkAccess.roxelWithCar(r));
 		Crazycar.networkAccess.releaseRoxel(roxel);
 		sleep(1000);
 		roxel = r;

@@ -1,11 +1,5 @@
 package crazycar.game;
 
-import org.openspaces.core.GigaSpace;
-
-import crazycar.logic.data.Location;
-import crazycar.persistent.Space;
-import crazycar.persistent.communication.CarWorker;
-
 public class Game {
 
 	/*Main Idea 
@@ -45,21 +39,5 @@ public class Game {
 	 * 				GUI zeigt in einem intervallgesteurten Snapshot die Position der Autos
 	 * Aufgabe 2: Ampeln + Partitionierung
 	 */
-	
-	public static void main(String[] args) {
-		final GigaSpace space = Space.create().getInstance();
-		
-
-	}
-
-	
-	static void initiateCars(int amount, GigaSpace space){
-		
-		for(int i=0; i<amount;i++){
-			CarWorker worker=new CarWorker(Location.valueOf(0, 0));
-			space.execute(worker);
-			
-		}
-	}
 	
 }

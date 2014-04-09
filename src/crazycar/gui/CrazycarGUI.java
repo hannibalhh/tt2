@@ -20,7 +20,6 @@ import crazycar.gui.actors.NoRoad;
 import crazycar.gui.actors.Crossroads;
 import crazycar.gui.actors.RoadNS;
 import crazycar.gui.actors.RoadWE;
-import crazycar.logic.data.AddCar;
 import crazycar.logic.data.Direction;
 import crazycar.logic.data.Network;
 import crazycar.logic.data.Roxel;
@@ -33,6 +32,7 @@ public class CrazycarGUI extends GameGrid {
 	// imagesize of cells in px
 	public final static int imagesize = 25;
 	private List<Actor> cars = new ArrayList<Actor>();
+	private List<Actor> tempcars = new ArrayList<Actor>();
 
 	private static final long serialVersionUID = 7378323006789259694L;
 
@@ -45,11 +45,12 @@ public class CrazycarGUI extends GameGrid {
 	public CrazycarGUI() {
 		super(50, 18, imagesize, java.awt.Color.black);
 		setTitle("Crazycar");
+		doRun();
 	}
 
 	private Actor newCarAndSave(Roxel r) {
 		Actor c = newCar(r);
-		cars.add(c);
+		tempcars.add(c);
 		return c;
 	}
 
@@ -67,24 +68,22 @@ public class CrazycarGUI extends GameGrid {
 	}
 
 	@Subscribe
-	public void addCar(AddCar a) {
-		addActor(newCarAndSave(a.getRoxel()), new Location(a.getRoxel().getLocation().getColumn(), a.getRoxel().getLocation().getRow()));
-	}
-
-	@Subscribe
 	public void moveListener(Snapshot s) {
-		log.debug("snapshot" + s.getRoxels());
+		log.debug("snapshot: " + s.getRoxels());
 		Iterator<Actor> it = cars.iterator();
-		if (cars.size() != s.getRoxels().size()) {
-			log.debug("Snapshot: roxels not quals cars size: cars:" + cars.size() + " roxels:" + s.getRoxels());
+		// initialized cars and size not equals
+		if (cars.size() == 0 && cars.size() != s.getRoxels().size()) {
+			log.error("Snapshot: roxels not quals cars size: cars:" + cars.size() + " roxels:" + s.getRoxels());
 		}
 		for (Roxel r : s.getRoxels()) {
 			if (it.hasNext()) {
-				log.debug("do it");
-				Actor a = it.next();
-				a.setLocation(new Location(r.getLocation().getColumn(), r.getLocation().getRow()));		
+				it.next().setLocation(new Location(r.getLocation().getColumn(), r.getLocation().getRow()));
+			} else {
+				addActor(newCarAndSave(r), new Location(r.getLocation().getColumn(), r.getLocation().getRow()));
 			}
 		}
+		cars.addAll(tempcars);
+		tempcars.clear();
 	}
 
 	@Subscribe

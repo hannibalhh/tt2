@@ -6,6 +6,7 @@ import com.gigaspaces.annotation.pojo.SpaceClass;
 import com.gigaspaces.annotation.pojo.SpaceId;
 import com.gigaspaces.annotation.pojo.SpaceProperty;
 
+import crazycar.logic.data.Car;
 import crazycar.logic.data.Roxel;
 import crazycar.persistent.Id;
 
@@ -16,22 +17,24 @@ public class RoxelSpace  implements Serializable{
 	private Id id;
 	private DirectionSpace direction;
 	private LocationSpace location;
+	private CarSpace car;
 
 	public RoxelSpace() {}
 
-	public RoxelSpace(Id id, DirectionSpace direction, LocationSpace location) {
-		this.id = id;
-		this.direction = direction;
-		this.location = location;
-	}
+	public RoxelSpace(Id id, DirectionSpace direction, LocationSpace location, CarSpace car) {
+	  this.id = id;
+	  this.direction = direction;
+	  this.location = location;
+	  this.car = car;
+  }
 
 	public static RoxelSpace valueOf(Roxel r) {
 		return new RoxelSpace(new Id(r), DirectionSpace.valueOf(r
-				.getDirection()), LocationSpace.valueOf(r.getLocation()));
+				.getDirection()), LocationSpace.valueOf(r.getLocation()),CarSpace.valueOf(r.getCar()));
 	}
 
 	public Roxel toRoxel() {
-		return Roxel.valueOf(direction.toDirection(), location.toLocation());
+		return Roxel.valueOf(direction.toDirection(), location.toLocation(),Car.valueOf(car.isEmpty()));
 	}
 
 	@SpaceId
@@ -43,7 +46,7 @@ public class RoxelSpace  implements Serializable{
 		this.id = id;
 	}
 
-    @SpaceProperty
+  @SpaceProperty
 	public DirectionSpace getDirection() {
 		return direction;
 	}
@@ -52,13 +55,22 @@ public class RoxelSpace  implements Serializable{
 		this.direction = direction;
 	}
 
-    @SpaceProperty
+  @SpaceProperty
 	public LocationSpace getLocation() {
 		return location;
 	}
 
 	public void setLocation(LocationSpace location) {
 		this.location = location;
+	}
+	
+	@SpaceProperty
+	public CarSpace getCar() {
+		return car;
+	}
+
+	public void setCar(CarSpace car) {
+		this.car = car;
 	}
 
 	@Override
