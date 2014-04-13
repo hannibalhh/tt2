@@ -22,7 +22,7 @@ public class Crazycar {
 	public final CrazycarGUI gui = new CrazycarGUI();
 	public final static NetworkAccess networkAccess = new NetworkAccess();
 	public final static Location size = Location.valueOf(15, 15);
-	public final static int cars = 2;
+	public final static int cars = 10;
 	public final static Network network = Network
 			.createSimple(size.getColumn());
 
@@ -78,12 +78,6 @@ public class Crazycar {
 			service.execute(r);
 		}
 
-	}
-
-	private static void carInit() {
-		for (int i = 0; i < cars; i += 1) {
-			new CarService();
-		}
 	}
 
 	public static EventBus bus() {

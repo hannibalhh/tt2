@@ -1,5 +1,6 @@
 package crazycar.gui;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -12,12 +13,9 @@ import ch.aplu.jgamegrid.Location;
 
 import com.google.common.eventbus.Subscribe;
 
-import crazycar.gui.actors.CarEastActor;
-import crazycar.gui.actors.CarNorthActor;
-import crazycar.gui.actors.CarSouthActor;
-import crazycar.gui.actors.CarWestActor;
-import crazycar.gui.actors.NoRoad;
+import crazycar.gui.actors.CarActor;
 import crazycar.gui.actors.Crossroads;
+import crazycar.gui.actors.NoRoad;
 import crazycar.gui.actors.RoadNS;
 import crazycar.gui.actors.RoadWE;
 import crazycar.logic.data.Direction;
@@ -31,15 +29,15 @@ public class CrazycarGUI extends GameGrid {
 
 	// imagesize of cells in px
 	public final static int imagesize = 25;
-	private List<Actor> cars = new ArrayList<Actor>();
-	private List<Actor> tempcars = new ArrayList<Actor>();
+	private List<CarActor> cars = new ArrayList<CarActor>();
+	private List<CarActor> tempcars = new ArrayList<CarActor>();
 
 	private static final long serialVersionUID = 7378323006789259694L;
 
-	public void addActor(Actor a, Location l) {
+	public void addActor(Actor a) {
 		// only one actor in one grid
-		removeActorsAt(l);
-		super.addActor(a, l);
+		removeActorsAt(a.getLocation());
+		super.addActor(a, a.getLocation());
 	}
 
 	public CrazycarGUI() {
@@ -49,37 +47,26 @@ public class CrazycarGUI extends GameGrid {
 	}
 
 	private Actor newCarAndSave(Roxel r) {
-		Actor c = newCar(r);
+		CarActor c = new CarActor();
+		addActor(c, CarActor.convertLocation(r.getLocation()));
+		c.changeRoxel(r);
 		tempcars.add(c);
 		return c;
-	}
-
-	public Actor newCar(Roxel r) {
-		if (r.getDirection().equals(Direction.north)) {
-			return new CarNorthActor();
-		} else if (r.getDirection().equals(Direction.south)) {
-			return new CarSouthActor();
-		} else if (r.getDirection().equals(Direction.west)) {
-			return new CarWestActor();
-		} else if (r.getDirection().equals(Direction.east)) {
-			return new CarEastActor();
-		}
-		throw new UnsupportedOperationException("newCar:wrong direction " + r.getDirection());
 	}
 
 	@Subscribe
 	public void moveListener(Snapshot s) {
 		log.debug("snapshot: " + s.getRoxels());
-		Iterator<Actor> it = cars.iterator();
+		Iterator<CarActor> it = cars.iterator();
 		// initialized cars and size not equals
 		if (cars.size() == 0 && cars.size() != s.getRoxels().size()) {
 			log.error("Snapshot: roxels not quals cars size: cars:" + cars.size() + " roxels:" + s.getRoxels());
 		}
 		for (Roxel r : s.getRoxels()) {
 			if (it.hasNext()) {
-				it.next().setLocation(new Location(r.getLocation().getColumn(), r.getLocation().getRow()));
+				it.next().changeRoxel(r);
 			} else {
-				addActor(newCarAndSave(r), new Location(r.getLocation().getColumn(), r.getLocation().getRow()));
+				addActor(newCarAndSave(r));
 			}
 		}
 		cars.addAll(tempcars);
@@ -107,6 +94,6 @@ public class CrazycarGUI extends GameGrid {
 	}
 
 	public static String imagefolder() {
-		return "images/" + imagesize;
+		return new File("").getAbsolutePath() + File.separator + "images" + File.separator + imagesize + File.separator;
 	}
 }
