@@ -1,5 +1,7 @@
 package crazycar.persistent.spaces;
 
+import java.io.Serializable;
+
 import com.gigaspaces.annotation.pojo.SpaceId;
 import com.gigaspaces.annotation.pojo.SpaceProperty;
 
@@ -8,10 +10,9 @@ import crazycar.logic.data.Location;
 import crazycar.logic.data.TrafficLight;
 import crazycar.persistent.Id;
 
-public class TrafficLightSpace {
+public class TrafficLightSpace implements Serializable{
 
-
-	private static final long serialVersionUID = 2051499763849972020L;
+	private static final long serialVersionUID = 2046647530408315502L;
 	private Id id;
 	private LocationSpace location;
 	
