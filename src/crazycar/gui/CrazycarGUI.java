@@ -18,10 +18,12 @@ import crazycar.gui.actors.Crossroads;
 import crazycar.gui.actors.NoRoad;
 import crazycar.gui.actors.RoadNS;
 import crazycar.gui.actors.RoadWE;
+import crazycar.gui.actors.TrafficLightActor;
 import crazycar.logic.data.Direction;
 import crazycar.logic.data.Network;
 import crazycar.logic.data.Roxel;
 import crazycar.logic.data.Snapshot;
+import crazycar.logic.data.TrafficLight;
 
 public class CrazycarGUI extends GameGrid {
 
@@ -31,6 +33,9 @@ public class CrazycarGUI extends GameGrid {
 	public final static int imagesize = 25;
 	private List<CarActor> cars = new ArrayList<CarActor>();
 	private List<CarActor> tempcars = new ArrayList<CarActor>();
+	
+	private List<TrafficLightActor> trafficlights = new ArrayList<TrafficLightActor>();
+	private List<TrafficLightActor> temptrafficlights = new ArrayList<TrafficLightActor>();
 
 	private static final long serialVersionUID = 7378323006789259694L;
 
@@ -53,24 +58,42 @@ public class CrazycarGUI extends GameGrid {
 		tempcars.add(c);
 		return c;
 	}
+	
+	private Actor newTrafficLightAndSave(TrafficLight r) {
+		TrafficLightActor c = new TrafficLightActor();
+		addActor(c, TrafficLightActor.convertLocation(r.getLocation()));
+		temptrafficlights.add(c);
+		return c;
+	}
 
 	@Subscribe
 	public void moveListener(Snapshot s) {
 		log.debug("snapshot: " + s.getRoxels());
-		Iterator<CarActor> it = cars.iterator();
+		log.debug("trafficlights: " + s.getTrafficlights());
+		Iterator<CarActor> itc = cars.iterator();
+		Iterator<TrafficLightActor> itt = trafficlights.iterator();
 		// initialized cars and size not equals
 		if (cars.size() == 0 && cars.size() != s.getRoxels().size()) {
 			log.error("Snapshot: roxels not quals cars size: cars:" + cars.size() + " roxels:" + s.getRoxels());
 		}
 		for (Roxel r : s.getRoxels()) {
-			if (it.hasNext()) {
-				it.next().changeRoxel(r);
+			if (itc.hasNext()) {
+				itc.next().changeRoxel(r);
 			} else {
 				addActor(newCarAndSave(r));
 			}
 		}
+		for (TrafficLight t : s.getTrafficlights()) {
+			if (itt.hasNext()) {
+				itt.next().changeChangeTrafficLight(t);
+			} else {
+				addActor(newTrafficLightAndSave(t));
+			}
+		}
 		cars.addAll(tempcars);
 		tempcars.clear();
+		trafficlights.addAll(temptrafficlights);
+		temptrafficlights.clear();
 	}
 
 	@Subscribe

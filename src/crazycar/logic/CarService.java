@@ -25,7 +25,9 @@ public class CarService {
 	
 	@SpaceDataEvent
 	public void step(){
+		
 		Roxel r = roxel.nextRoxel();
+		
 		log.debug("next roxel " + r);
 		
 		log.debug("blocked: " + Crazycar.networkAccess.roxelWithCar(r));

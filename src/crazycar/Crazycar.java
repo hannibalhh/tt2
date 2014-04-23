@@ -10,6 +10,7 @@ import com.google.common.eventbus.EventBus;
 import crazycar.gui.CrazycarGUI;
 import crazycar.logic.CarService;
 import crazycar.logic.SnapshotService;
+import crazycar.logic.TrafficLightService;
 import crazycar.logic.data.Location;
 import crazycar.logic.data.Network;
 import crazycar.persistent.NetworkAccess;
@@ -23,6 +24,7 @@ public class Crazycar {
 	public final static NetworkAccess networkAccess = new NetworkAccess();
 	public final static Location size = Location.valueOf(15, 15);
 	public final static int cars = 10;
+	public final static int trafficlights = 3;
 	public final static Network network = Network
 			.createSimple(size.getColumn());
 
@@ -44,8 +46,25 @@ public class Crazycar {
 //		carInit();
 		threadedCars();
 		threadedSnapshot();
+		threadedTrafficLights();
 		log.debug(networkAccess.snapshot());
 	}
+
+	private static void threadedTrafficLights() {
+		ExecutorService service = Executors.newCachedThreadPool();
+		for (int i = 0; i < trafficlights; i += 1) {
+			Runnable r = new Runnable() {
+				@Override
+				public void run() {
+					TrafficLightService v = new TrafficLightService();
+					while(true){
+						v.step();
+					}
+				}
+			};
+			service.execute(r);
+		}
+  }
 
 	private static void threadedSnapshot() {
 		ExecutorService service = Executors.newCachedThreadPool();

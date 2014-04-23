@@ -2,37 +2,52 @@ package crazycar.logic.data;
 
 public class TrafficLight {
 
-	
-	public enum Color {GREEN, RED};
-	
+	public enum Color {
+		GREEN, RED
+	};
+
 	private final Location location;
-	private TrafficLight.Color stateNS=TrafficLight.Color.GREEN;
-	private TrafficLight.Color stateEW=TrafficLight.Color.GREEN;
-	
-	public TrafficLight(Location loc){
-		location=loc;
+	private TrafficLight.Color stateNS = TrafficLight.Color.GREEN;
+	private TrafficLight.Color stateEW = TrafficLight.Color.GREEN;
+
+	public TrafficLight(Location loc) {
+		location = loc;
+	}
+
+	private TrafficLight(Location location, Color stateNS, Color stateEW) {
+		this.location = location;
+		this.stateNS = stateNS;
+		this.stateEW = stateEW;
 	}
 	
-	public Color getLightNS(){
+	public static TrafficLight valueOf(Location location) {
+		return new TrafficLight(location);
+	}
+
+	public static TrafficLight valueOf(Location location, Color stateNS, Color stateEW) {
+		return new TrafficLight(location, stateNS, stateEW);
+	}
+
+	public Color getLightNS() {
 		return stateNS;
 	}
-	
-	public Color getLightEW(){
+
+	public Color getLightEW() {
 		return stateEW;
 	}
-	
-	public void setLightNS(Color col){
-		stateNS=col;
+
+	public void setLightNS(Color col) {
+		stateNS = col;
 	}
-	
-	public void setLightEW(Color col){
-		stateEW=col;
+
+	public void setLightEW(Color col) {
+		stateEW = col;
 	}
-	
-	public Location getLocation(){
+
+	public Location getLocation() {
 		return location;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -41,7 +56,7 @@ public class TrafficLight {
 		result = prime * result + location.getRow();
 		result = prime * result + stateNS.ordinal();
 		result = prime * result + stateEW.ordinal();
-		
+
 		return result;
 	}
 
@@ -56,12 +71,13 @@ public class TrafficLight {
 		TrafficLight other = (TrafficLight) obj;
 		if (!(location.equals(other.location)))
 			return false;
-		else	
+		else
 			return true;
 	}
 
 	@Override
 	public String toString() {
-		return "[lightNS= "+(stateNS.equals(Color.GREEN)?"GREEN":"RED")+" lightEW= "+(stateEW.equals(Color.GREEN)?"GREEN":"RED")+" @"+location.toString()+"]";
+		return "[lightNS= " + (stateNS.equals(Color.GREEN) ? "GREEN" : "RED") + " lightEW= " + (stateEW.equals(Color.GREEN) ? "GREEN" : "RED") + " @"
+		    + location.toString() + "]";
 	}
 }

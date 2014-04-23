@@ -12,14 +12,17 @@ import com.gigaspaces.client.ChangeSet;
 import com.j_spaces.core.client.SQLQuery;
 
 import crazycar.logic.data.Car;
+import crazycar.logic.data.Direction;
 import crazycar.logic.data.Location;
 import crazycar.logic.data.Network;
 import crazycar.logic.data.Roxel;
 import crazycar.logic.data.Snapshot;
+import crazycar.logic.data.TrafficLight;
 import crazycar.persistent.spaces.CarSpace;
 import crazycar.persistent.spaces.DirectionSpace;
 import crazycar.persistent.spaces.LocationSpace;
 import crazycar.persistent.spaces.RoxelSpace;
+import crazycar.persistent.spaces.TrafficLightSpace;
 
 public class NetworkAccess {
 	private static Logger log = Logger.getLogger(NetworkAccess.class);
@@ -30,9 +33,15 @@ public class NetworkAccess {
 		log.debug("start");
 	}
 	
+	public GigaSpace space(){
+		return space;
+	}
+	
 	public void cleanup(){
 		SQLQuery<RoxelSpace> query = new SQLQuery<RoxelSpace>(RoxelSpace.class,"");
 		space.takeMultiple(query);
+		SQLQuery<TrafficLightSpace> query1 = new SQLQuery<TrafficLightSpace>(TrafficLightSpace.class,"");
+		space.takeMultiple(query1);
 	}
 	
 	public void save(Network n){
@@ -46,7 +55,10 @@ public class NetworkAccess {
 	}
 	
 	public boolean roxelWithCar(Roxel r){
-		SQLQuery<RoxelSpace> query = new SQLQuery<RoxelSpace>(RoxelSpace.class,"location.row =" + r.getLocation().getRow() + " and location.column = " + r.getLocation().getColumn());
+		SQLQuery<TrafficLightSpace> queryLight=new SQLQuery<TrafficLightSpace>(TrafficLightSpace.class,"location.row =" + r.getLocation().getRow() + " and location.column = " + r.getLocation().getColumn() + " and "+(r.getDirection().equals(Direction.south) ? "lightNS='GREEN'":"lightEW='GREEN'"));
+		space.read(queryLight);
+		
+		SQLQuery<RoxelSpace> query = new SQLQuery<RoxelSpace>(RoxelSpace.class,"location.row =" + r.getLocation().getRow() + " and location.column = " + r.getLocation().getColumn() + " and car.empty = true");
 		ChangeResult<RoxelSpace> cr = space.change(query, new ChangeSet().set("car", CarSpace.valueOf(Car.ferrari)).set("direction", DirectionSpace.valueOf(r.getDirection())));
 		return cr.getNumberOfChangedEntries() >= 1;
 	}
@@ -81,12 +93,21 @@ public class NetworkAccess {
 		return Arrays.asList(space.readMultiple(query));
 	}
 	
+	private List<TrafficLightSpace> trafficlightsSpace(){
+		SQLQuery<TrafficLightSpace> query = new SQLQuery<TrafficLightSpace>(TrafficLightSpace.class,"");
+		return Arrays.asList(space.readMultiple(query));
+	}
+	
 	public Snapshot snapshot(){
 		List<Roxel> l = new ArrayList<Roxel>();
 		for(RoxelSpace r : snapshotSpace()){
 			l.add(r.toRoxel());
 		}
-		return Snapshot.valueOf(l);
+		List<TrafficLight> t = new ArrayList<TrafficLight>();
+		for(TrafficLightSpace r : trafficlightsSpace()){
+			t.add(r.toTrafficLight());
+		}
+		return Snapshot.valueOf(l,t);
 	}
 	
 	/*
@@ -113,5 +134,9 @@ public class NetworkAccess {
 	public boolean take(Location l){
 		return space.takeById(LocationSpace.class,new Id(l)) != null;
 	}
+
+	public void save(TrafficLight light) {
+		space.write(TrafficLightSpace.valueOf(light));	  
+  }
 	
 }

@@ -11,10 +11,14 @@ import crazycar.gui.CrazycarGUI;
 import crazycar.logic.data.Direction;
 
 public enum CarBackground {
-	north("car-north.gif"),south("car-south.gif"),west("car-west.gif"),east("car-east.gif");
+	north("car-north.gif"),south("car-south.gif"),west("car-west.gif"),east("car-east.gif"),ugly("car-east.gif",true);
 	
 	private CarBackground(String url) {	
 		this.image = convert(read(CrazycarGUI.imagefolder() + url));
+  }
+	
+	private CarBackground(String url,boolean convert) {	
+		this.image = read(CrazycarGUI.imagefolder() + url);
   }
 
 	private final BufferedImage image;	
