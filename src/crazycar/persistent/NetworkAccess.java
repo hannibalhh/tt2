@@ -62,6 +62,11 @@ public class NetworkAccess {
 		return space.take(query).toRoxel();
 	}
 	
+	public Roxel takeRandomCrossingRoxel(){
+		SQLQuery<RoxelSpace> query = new SQLQuery<RoxelSpace>(RoxelSpace.class,"car.empty = true and direction.direction = 'nodecide'");
+		return space.read(query).toRoxel();
+	}
+	
 	public boolean take(Roxel r){
 		return space.takeById(RoxelSpace.class,new Id(r)) != null;
 	}
